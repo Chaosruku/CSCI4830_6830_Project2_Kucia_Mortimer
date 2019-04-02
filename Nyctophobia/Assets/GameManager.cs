@@ -1,14 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 //Game manager for nyctophobia simulator
 public class GameManager : MonoBehaviour
 {
 
     //important game variables
-    public float gameTimer; //time between beginning and completing a map 
-    public float brightness; //current ambient light intensity 
-    public float usage; //flashlight used 
+    //performance tracking
+    public float gameTimer; //time between beginning and completing a map  
+    public float usage; //time spent using flashlight 
+    public float batteries; //number of batteries collected 
+
+    //therapist control variables 
+    public Slider brightness; //current ambient light intensity
+    public Slider decay; //rate at which flashlight brightness decays 
+    public Slider beam; //width of flashlight beam 
+    public Slider raycast; //maximum teleport distance 
+
     private bool win;//true if map completed 
 
     //Interactable Objects 
@@ -33,6 +42,7 @@ public class GameManager : MonoBehaviour
         plugsPlugged = 0;
         allPulled = false;
         allPlugged = false;
+        RenderSettings.ambientIntensity = brightness.value;
     }
     //opens door if all switches pulled and all plugs plugged
     IEnumerator OpenDoor()
@@ -57,6 +67,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RenderSettings.ambientIntensity = brightness.value;
         //updating counts
         if (switchObject.getCounted() == false)
         {
