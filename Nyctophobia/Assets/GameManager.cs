@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 //Game manager for nyctophobia simulator
 public class GameManager : MonoBehaviour
@@ -12,26 +13,29 @@ public class GameManager : MonoBehaviour
 
     //important game variables
     //performance tracking
-    public float gameTimer; //time between beginning and completing a map  
-    public float usage; //time spent using flashlight 
-    public float batteries; //number of batteries collected 
+    private float gameTimer; //time between beginning and completing a map  
+    private float usage; //time spent using flashlight 
 
     //therapist control variables 
     public Slider brightness; //current ambient light intensity
     public Slider decay; //rate at which flashlight brightness decays 
     public Slider beam; //width of flashlight beam 
-    public Slider raycast; //maximum teleport distance 
+    public Slider fIntensity; //maximum teleport distance 
 
     private bool win;//true if map completed 
 
     //Interactable Objects 
+    public Light flashlight; //player flashlight
+    public FlashlightControl fcontrol; //FlashlightController holds timer
     public Switch switchObject; //switches to unlock exit 
     public Plug plugObject; //plugs to connect to activate power 
     public Door doorObject; //door blocking player from winning 
     public WinZone winObject; //player wins the game when contact is made
 
     //game update stuff
-    private bool open;
+    private float initialSpot; //initial spot angle of flashlight
+    private float initialIntensity; //initial y value of teleport laser 
+    private bool open; //door may or may not be open
     private bool allPulled; //true if all switches have been pulled 
     private bool allPlugged; //true if all plugs are plugged
     private int switchCount;//total switches in map 
@@ -39,25 +43,39 @@ public class GameManager : MonoBehaviour
     private int plugCount;//total plugs in map 
     private int plugsPlugged;//current number of plugged plugs 
 
+    //timers
+    private float startTime; //Time the scene starts
+    private float currentTime; //tracks current time
+    private float lightOld; //old flashlight usage 
+
     // Start is called before the first frame update
     void Start()
     {
         win = false;
         switchesPulled = 0;
         plugsPlugged = 0;
-        switchCount = switches.Length;
-        plugCount = plugs.Length;
+
         allPulled = false;
         allPlugged = false;
         open = false;
         switches = GameObject.FindGameObjectsWithTag("Switch");
         plugs = GameObject.FindGameObjectsWithTag("Plug");
+        switchCount = switches.Length;
+        plugCount = plugs.Length;
+        //initializing therapist controls
         RenderSettings.ambientIntensity = brightness.value;
+        initialSpot = flashlight.spotAngle;
+        initialIntensity = flashlight.intensity;
+        startTime = Time.time;
+        currentTime = startTime;
+        lightOld = fcontrol.totalTime;
+        gameTimer = 0;
+        usage = 0;
     }
     //opens door if all switches pulled and all plugs plugged
     IEnumerator OpenDoor()
     {
-        open = false;
+        open = true;
         doorObject.Open();
         yield return null;
     }
@@ -92,8 +110,8 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
     IEnumerator updatePlugs()
-    { 
-        for (int i = 0; i<plugs.Length; i++)
+    {
+        for (int i = 0; i < plugs.Length; i++)
         {
             Plug p = plugs[i].GetComponent<Plug>();
             if (p.getCounted())
@@ -113,14 +131,30 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //timer
+        currentTime = Time.time;
+        if (!win)
+        {
+            gameTimer = currentTime - startTime;
+            usage = fcontrol.totalTime;
+        }
+
+        //therapist controls
         RenderSettings.ambientIntensity = brightness.value;
+        if (fcontrol.totalTime-lightOld>=3000)
+        {
+            lightOld = fcontrol.totalTime;
+            initialIntensity *= 1 / decay.value;
+        }
+        flashlight.spotAngle = initialSpot * beam.value;
+        flashlight.intensity = initialIntensity * fIntensity.value;
 
         //updating switches and plugs 
         StartCoroutine(updateSwitches());
         StartCoroutine(updatePlugs());
 
         //updating door
-        if (allPulled&&allPlugged&&!open)
+        if (allPulled && allPlugged && !open)
         {
             Debug.Log("Open the gates!");
             StartCoroutine(OpenDoor());
@@ -130,7 +164,16 @@ public class GameManager : MonoBehaviour
         if (winObject.getWin())
         {
             win = true;
+            Debug.Log("Previous Completion Time: " + PlayerPrefs.GetFloat("GameTime", gameTimer));
+            Debug.Log("Previous Flashlight Usage Time: " + PlayerPrefs.GetFloat("UsageTime", usage));
+            PlayerPrefs.SetFloat("GameTime", gameTimer);
+            PlayerPrefs.SetFloat("UsageTime", usage);
             StartCoroutine(GameEnd());
         }
+    }
+
+    public void changeScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }

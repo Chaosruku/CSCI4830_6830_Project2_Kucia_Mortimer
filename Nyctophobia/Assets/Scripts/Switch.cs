@@ -21,7 +21,7 @@ public class Switch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool getCounted()
@@ -31,7 +31,7 @@ public class Switch : MonoBehaviour
             //makes sure an instance is only counted once
             return false;
         }
-        if (!counted&&pulled)
+        if (!counted && pulled)
         {
             counted = true;
         }
@@ -43,7 +43,7 @@ public class Switch : MonoBehaviour
     {
         Debug.Log("Pulling!");
         //pull switch
-        if (this.gameObject != null&&pulled==false)
+        if (this.gameObject != null && pulled == false)
         {
             //animate
             anim.Play("SwitchPull");

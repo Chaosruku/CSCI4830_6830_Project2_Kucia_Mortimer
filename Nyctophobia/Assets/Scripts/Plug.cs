@@ -20,7 +20,7 @@ public class Plug : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool getCounted()
@@ -30,7 +30,7 @@ public class Plug : MonoBehaviour
             //makes sure an instance is only counted once
             return false;
         }
-        if (!counted&&plugged)
+        if (!counted && plugged)
         {
             counted = true;
         }
@@ -43,7 +43,7 @@ public class Plug : MonoBehaviour
     {
         Debug.Log("Plugging!");
         //pull switch
-        if (this.gameObject != null&&plugged==false)
+        if (this.gameObject != null && plugged == false)
         {
             //animate
             anim.Play("PlugIn");

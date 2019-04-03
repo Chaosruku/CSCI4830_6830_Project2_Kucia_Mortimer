@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.nyctophobia.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "C:\\Users\\vel\\Desktop\\CSCI4830_6830_Project2_Kucia_Mortimer-master\\CSCI4830_6830_Project2_Kucia_Mortimer\\Nyctophobia\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "Nyctophobia [Testing]"
+        }
+      }
+    }
+  ]
+}
