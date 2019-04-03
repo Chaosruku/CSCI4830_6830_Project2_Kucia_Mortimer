@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Harder.unity
-  isLoaded: 1
-  isActive: 1

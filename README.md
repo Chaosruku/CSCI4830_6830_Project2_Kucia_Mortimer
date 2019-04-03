@@ -1,1 +1,0 @@
-# CSCI4830_6830_Project2_Kucia_Mortimer
