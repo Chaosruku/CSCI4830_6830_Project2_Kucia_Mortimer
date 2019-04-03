@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,11 @@ public class Switch : MonoBehaviour
 
     public bool getCounted()
     {
+        if (counted)
+        {
+            //makes sure an instance is only counted once
+            return false;
+        }
         if (!counted&&pulled)
         {
             counted = true;
@@ -44,4 +50,5 @@ public class Switch : MonoBehaviour
             pulled = true;
         }
     }
+
 }

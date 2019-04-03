@@ -25,6 +25,11 @@ public class Plug : MonoBehaviour
 
     public bool getCounted()
     {
+        if (counted)
+        {
+            //makes sure an instance is only counted once
+            return false;
+        }
         if (!counted&&plugged)
         {
             counted = true;

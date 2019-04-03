@@ -6,6 +6,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
+    //arrays
+    public GameObject[] switches;
+    public GameObject[] plugs;
+
     //important game variables
     //performance tracking
     public float gameTimer; //time between beginning and completing a map  
@@ -27,11 +31,12 @@ public class GameManager : MonoBehaviour
     public WinZone winObject; //player wins the game when contact is made
 
     //game update stuff
+    private bool open;
     private bool allPulled; //true if all switches have been pulled 
     private bool allPlugged; //true if all plugs are plugged
-    public int switchCount;//total switches in map 
+    private int switchCount;//total switches in map 
     private int switchesPulled;// current number of pulled switches
-    public int plugCount;//total plugs in map 
+    private int plugCount;//total plugs in map 
     private int plugsPlugged;//current number of plugged plugs 
 
     // Start is called before the first frame update
@@ -40,13 +45,19 @@ public class GameManager : MonoBehaviour
         win = false;
         switchesPulled = 0;
         plugsPlugged = 0;
+        switchCount = switches.Length;
+        plugCount = plugs.Length;
         allPulled = false;
         allPlugged = false;
+        open = false;
+        switches = GameObject.FindGameObjectsWithTag("Switch");
+        plugs = GameObject.FindGameObjectsWithTag("Plug");
         RenderSettings.ambientIntensity = brightness.value;
     }
     //opens door if all switches pulled and all plugs plugged
     IEnumerator OpenDoor()
     {
+        open = false;
         doorObject.Open();
         yield return null;
     }
@@ -63,32 +74,55 @@ public class GameManager : MonoBehaviour
         }
         yield return null;
     }
+    IEnumerator updateSwitches()
+    {
+        for (int i = 0; i < switches.Length; i++)
+        {
+            Switch s = switches[i].GetComponent<Switch>();
+            if (s.getCounted())
+            {
+                switchesPulled++;
+            }
+        }
+        //updating switches 
+        if (switchesPulled >= switchCount)
+        {
+            allPulled = true;
+        }
+        yield return null;
+    }
+    IEnumerator updatePlugs()
+    { 
+        for (int i = 0; i<plugs.Length; i++)
+        {
+            Plug p = plugs[i].GetComponent<Plug>();
+            if (p.getCounted())
+            {
+                plugsPlugged++;
+                Debug.Log("plugsPlugged: " + plugsPlugged);
+            }
+        }
+        //updating plugs
+        if (plugsPlugged >= plugCount)
+        {
+            allPlugged = true;
+        }
+        yield return null;
+    }
 
     // Update is called once per frame
     void Update()
     {
         RenderSettings.ambientIntensity = brightness.value;
-        //updating counts
-        if (switchObject.getCounted() == false)
-        {
-            switchesPulled++;
-        }
-        if (plugObject.getCounted() == false)
-        {
-            plugsPlugged++;
-        }
-        //updating switches and plugs
-        if (switchesPulled >= switchCount)
-        {
-            allPulled = true;
-        }
-        if(plugsPlugged >= plugCount)
-        {
-            allPlugged = true; 
-        }
+
+        //updating switches and plugs 
+        StartCoroutine(updateSwitches());
+        StartCoroutine(updatePlugs());
+
         //updating door
-        if (allPulled&&allPlugged)
+        if (allPulled&&allPlugged&&!open)
         {
+            Debug.Log("Open the gates!");
             StartCoroutine(OpenDoor());
         }
 

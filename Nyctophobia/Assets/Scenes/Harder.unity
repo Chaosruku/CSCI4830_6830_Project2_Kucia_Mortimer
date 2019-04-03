@@ -144,7 +144,7 @@ RectTransform:
   - {fileID: 2032626295}
   - {fileID: 134941332}
   m_Father: {fileID: 577066770}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -901,7 +901,7 @@ RectTransform:
   - {fileID: 1214689414}
   - {fileID: 1206124394}
   m_Father: {fileID: 577066770}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4208,7 +4208,7 @@ RectTransform:
   - {fileID: 1107482922}
   - {fileID: 1258878037}
   m_Father: {fileID: 577066770}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4256,9 +4256,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 447852803}
   m_Direction: 0
   m_MinValue: 0.05
-  m_MaxValue: 0.3
+  m_MaxValue: 0.45
   m_WholeNumbers: 0
-  m_Value: 0.152
+  m_Value: 0.149
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -4683,10 +4683,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.59945, y: 0.59945, z: 0.59945}
   m_Children:
-  - {fileID: 95094502}
   - {fileID: 443365331}
   - {fileID: 1515151623}
   - {fileID: 5785138}
+  - {fileID: 95094502}
   - {fileID: 613480488}
   m_Father: {fileID: 1560935925}
   m_RootOrder: 0
@@ -8692,7 +8692,7 @@ RectTransform:
   - {fileID: 1095884213}
   - {fileID: 1194594513}
   m_Father: {fileID: 577066770}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9539,17 +9539,16 @@ MonoBehaviour:
   gameTimer: 0
   usage: 0
   batteries: 0
-  brightness: 0
-  battery: 0
-  lightDecay: 0
-  beamWidth: 0
-  raydistance: 0
+  brightness: {fileID: 443365332}
+  decay: {fileID: 1515151624}
+  beam: {fileID: 5785139}
+  raycast: {fileID: 95094503}
   switchObject: {fileID: 315741671}
   plugObject: {fileID: 2131663561}
   doorObject: {fileID: 1889483638}
   winObject: {fileID: 1175618245}
-  switchCount: 1
-  plugCount: 1
+  switchCount: 3
+  plugCount: 2
 --- !u!4 &1708511930
 Transform:
   m_ObjectHideFlags: 0
